@@ -1,3 +1,35 @@
+# Clearning Terminal in VS code 
+
+# Per comments, in later versions of VSCode (1.29 and above) this shortcut is missing / needs to be created manually.
+
+# Navigate: File > Preferences > Keyboard Shortcuts
+# search for workbench.action.terminal.clear
+# If it has no mapping or you wish to change the mapping, continue; otherwise note & use the 
+# existing mapping
+# Double click on this entry & you'll be prompted for a key binding. Hold CTRL and tap K. 
+# Ctrl + K should now be listed. Press enter to save this mapping
+# Right click the entry and select Change when expression. Type terminalFocus then press enter.
+# That's it. Now, when the terminal is in focus and you press Ctrl+K you'll get the behaviour 
+# you'd have expected to get from running clear/cls.
+
+
+
+
+# ============ Reading data from Git hut
+
+# first need to click on RAW and then copy the URL and use read.csv to access the file
+
+# https://github.com/PatMartin/Dex/blob/master/data/CrimeStatebyState.csv
+
+# https://raw.githubusercontent.com/PatMartin/Dex/master/data/CrimeStatebyState.csv
+
+data2 = read.csv("https://raw.githubusercontent.com/PatMartin/Dex/master/data/CrimeStatebyState.csv",header=TRUE)
+
+head(data2)
+# ----- OR 
+
+data3 = fread("https://raw.githubusercontent.com/PatMartin/Dex/master/data/CrimeStatebyState.csv",header=TRUE)
+
 
 # ============ To get the list of Packages
 
