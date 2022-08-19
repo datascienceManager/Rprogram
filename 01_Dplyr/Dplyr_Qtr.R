@@ -290,6 +290,125 @@ InnJoinsA = inner_join(df1,df2,by= 'ID')
 
 InnJoinsB = inner_join(df1,df3,by=c('ID'='IDD','w'='a'))
 
+library(dplyr)
+
+# 
+
+mtcars$model <- rownames(mtcars)
+
+# Eliminating the rownames
+
+rownames(mtcars) = NULL
+
+first <- mtcars[1:20, ]
+second <- mtcars[15:32, ]
+
+
+# Intersection happens when their is common values
+
+dplyr::intersect(first, second)
+
+
+# Applying UNION
+# UNION displays all rows from both the tables and removes 
+# duplicate records from the combined dataset. By using union_all function, it allows duplicate rows in the combined dataset
+
+dplyr::union(first, second)
+
+# Rows appear in one table but not in other table
+dplyr::setdiff(first, second)
+
+dplyr::setdiff(second, first)
+
+# Combines all the values including duplicate values
+union_all(first, second)
+
+
+# Handling of duplicates:
+a <- data.frame(column = c(1:10, 10))
+b <- data.frame(column = c(1:5, 5))
+
+# intersection is 1 to 5, duplicates removed (5)
+intersect(a, b)
+
+# union is 1 to 10, duplicates removed (5 and 10)
+union(a, b)
+
+# set difference, duplicates removed (10)
+setdiff(a, b)
+
+
+# union all does not remove duplicates
+union_all(a, b)
+
+
+# 
+startwars = data.frame(starwars)
+
+# Choose rows using their position with slice()
+
+starwars %>% slice(5:7)
+
+
+starwars %>% slice_head(n = 3)
+
+
+# Slice with Sample and proportion
+
+# Use replace = TRUE to perform a bootstrap sample. If needed, you can weight the sample with the weight argument.
+
+starwars %>% slice_sample(prop = 0.1, replace=TRUE)
+
+
+starwars %>% slice_sample(n = 5)
+
+# slice_min() and slice_max() select rows with highest or lowest values of a variable. 
+# Note that we first must choose only the values which are not NA.
+
+starwars = data.frame(starwars[1:10,])
+
+
+# Top 3 best from respective column 
+starwars %>% filter(.,!is.na(height))%>%slice_max(.,height,n=3)
+
+# similarly for minimum 
+
+starwars %>% filter(.,!is.na(height))%>%slice_min(.,height,n=3)
+
+# across() function
+# across( ) function was added starting dplyr version 1.0. It helps analyst to perform same operation on multiple columns
+
+starwars %>% 
+  select(.,species,height,mass) %>%
+  group_by(.,species) %>%
+  summarise(across(height:mass, mean))
+
+starwars %>% select(.,species,height,mass) %>%
+             group_by(.,species) %>% 
+             summarise(across(where(is.numeric),mean))
+
+# Here we are using two summary statistics - mean and no. of distinct values in two different set of variables.
+  mtcars %>% 
+  group_by(carb) %>% 
+  summarise(across(mpg:qsec, mean), across(vs:gear, n_distinct))
+
+# across() can also be applied with mutate function
+
+mtcars %>% group_by(carb)%>%mutate(across(where(is.numeric),mean))
+
+mtcars%>% group_by(.,carb,model) %>% mutate(across(everything(), mean, na.rm = TRUE))
+
+# rowwise()
+
+df <- data.frame(id= seq(1,5,1),x = round(runif(5,1,10),0), y = round(runif(5,1,10),0), z = round(runif(5,1,10),0))
+
+df %>%mutate(MinVal = do.call(pmin,.), MaxVal = do.call(pmax,.))
+
+
+df%>%rowwise(.,id)%>%mutate(.,TotalSum = sum(c_across(x:z)),MinV = min(c_across(x:z)))
+
+
+df%>%rowwise(.,id)%>%mutate(.,TotalSum = sum(c_across(is.numeric)))
 
 # How to deal with Quotation
 
