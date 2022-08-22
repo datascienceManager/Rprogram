@@ -412,7 +412,11 @@ df%>%rowwise(.,id)%>%mutate(.,TotalSum = sum(c_across(is.numeric)))
 
 # How to deal with Quotation
 
+mtcars1 = mtcars[1:10,]
 
+for (var in names(mtcars1)) {
+  mtcars1 %>% count(.data[[var]]) %>% print()
+}
 
 
 
